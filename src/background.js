@@ -206,6 +206,23 @@ try {
 		});
 	});
 
+	ipcMain.on("wyszukaj_klient", async (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.query(
+				`SELECT * FROM KLIENCI WHERE KLIENCI.KL_IMIE LIKE '${
+					data.imie
+				}%' AND KLIENCI.KL_NAZWISKO LIKE '${data.nazwisko}%'`,
+				function(err, result) {
+					console.log(result);
+					event.sender.send("wyszukaj_klient", result);
+
+					db.detach();
+				}
+			);
+		});
+	});
+
 	ipcMain.on("dodaj_klienta", (event, data) => {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
@@ -218,8 +235,6 @@ try {
 					data.miejscowosc
 				}')`,
 				function(err, result) {
-					console.log(result);
-
 					db.detach();
 				}
 			);
