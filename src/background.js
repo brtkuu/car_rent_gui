@@ -163,7 +163,7 @@ try {
 		mainWindow = createMainWindow();
 	});
 
-	ipcMain.on("klienci", (event) => {
+	ipcMain.on("klienci", async (event) => {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 
@@ -171,7 +171,7 @@ try {
 			db.query(
 				"SELECT * FROM KLIENCI k INNER JOIN ADRESY a ON a.KL_ID = k.KL_ID",
 				function(err, result) {
-					console.log(result);
+					event.sender.send("klienci", result);
 					db.detach();
 				}
 			);
@@ -184,9 +184,45 @@ try {
 			// db = DATABASE
 			db.query("SELECT * FROM AUTA", function(err, result) {
 				event.sender.send("auta", result);
-				console.log(result);
 				db.detach();
 			});
+		});
+	});
+
+	ipcMain.on("wyszukaj_auta", async (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.query(
+				`SELECT * FROM AUTA WHERE AUTA.AU_MARKA LIKE '${
+					data.marka
+				}%' AND AUTA.AU_MODEL LIKE '${data.model}%'`,
+				function(err, result) {
+					console.log(result);
+					event.sender.send("wyszukaj_auta", result);
+
+					db.detach();
+				}
+			);
+		});
+	});
+
+	ipcMain.on("dodaj_klienta", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.execute(
+				`EXECUTE PROCEDURE UTWORZ_KLIENT('${data.imie}','${
+					data.nazwisko
+				}','${data.pesel}','${data.tel}','${data.nip}', '${
+					data.ulica
+				}','${data.nr_domu}','${data.kod_pocztowy}','${
+					data.miejscowosc
+				}')`,
+				function(err, result) {
+					console.log(result);
+
+					db.detach();
+				}
+			);
 		});
 	});
 } catch (err) {
