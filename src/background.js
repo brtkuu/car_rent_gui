@@ -182,10 +182,13 @@ try {
 			if (err) throw err;
 
 			// db = DATABASE
-			db.query("SELECT * FROM AUTA", function(err, result) {
-				event.sender.send("auta", result);
-				db.detach();
-			});
+			db.query(
+				"SELECT * FROM AUTA a INNER JOIN ROZMIESZCZENIE r ON a.AU_ID = r.AU_ID",
+				function(err, result) {
+					event.sender.send("auta", result);
+					db.detach();
+				}
+			);
 		});
 	});
 
@@ -193,7 +196,7 @@ try {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.query(
-				`SELECT * FROM AUTA WHERE AUTA.AU_MARKA LIKE '${
+				`SELECT * FROM AUTA INNER JOIN ROZMIESZCZENIE r ON AUTA.AU_ID = r.AU_ID WHERE AUTA.AU_MARKA LIKE '${
 					data.marka
 				}%' AND AUTA.AU_MODEL LIKE '%${data.model}%'`,
 				function(err, result) {
@@ -247,9 +250,35 @@ try {
 			db.query(
 				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID`,
 				function(err, result) {
-					console.log(result);
 					event.sender.send("wypozyczenia", result);
 
+					db.detach();
+				}
+			);
+		});
+	});
+
+	ipcMain.on("placowki", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.query(
+				`SELECT * FROM PLACOWKI p INNER JOIN ADRESY a ON a.PL_NAZWA = p.PL_NAZWA`,
+				function(err, result) {
+					event.sender.send("placowki", result);
+
+					db.detach();
+				}
+			);
+		});
+	});
+
+	ipcMain.on("zwrot", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.execute(
+				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, '${data.pl_nazwa}')`,
+				function(err, result) {
+					event.sender.send("zwrot");
 					db.detach();
 				}
 			);
