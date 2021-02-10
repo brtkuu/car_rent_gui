@@ -56,3 +56,8 @@ export default {
 	}
 }
 </script>
+<style scoped>
+li {
+    cursor: pointer;
+}
+</style>

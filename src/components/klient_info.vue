@@ -28,8 +28,7 @@ export default {
                 start: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
                 zwrot: document.getElementById('zwrot').value,
             }
-            ipcRenderer.send("wypozycz", params);
-            ipcRenderer.send("dostepne_auta");
+
         }
     }
 }

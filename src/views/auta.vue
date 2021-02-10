@@ -9,7 +9,7 @@
         <button @click="wyszukaj()">Wyszukaj</button>
         <ul>
         <li v-for="(item) in this.wypozyczenia" v-bind:key="item.AU_ID" @click="autoClick(item)">
-            {{item.AU_MARKA}} {{item.AU_MODEL}} {{item.AU_DOSTEPNOSC}}
+            {{item.AU_MARKA}} {{item.AU_MODEL}} | Dostepnosc: {{item.AU_DOSTEPNOSC}}
         </li>
     </ul>
     <auto-info v-if="show_component_auto" v-bind:item="wybrane_auto" />
@@ -56,3 +56,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+li {
+    cursor: pointer;
+}
+</style>

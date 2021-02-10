@@ -195,7 +195,7 @@ try {
 			db.query(
 				`SELECT * FROM AUTA WHERE AUTA.AU_MARKA LIKE '${
 					data.marka
-				}%' AND AUTA.AU_MODEL LIKE '${data.model}%'`,
+				}%' AND AUTA.AU_MODEL LIKE '%${data.model}%'`,
 				function(err, result) {
 					console.log(result);
 					event.sender.send("wyszukaj_auta", result);
@@ -210,9 +210,9 @@ try {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.query(
-				`SELECT * FROM KLIENCI WHERE KLIENCI.KL_IMIE LIKE '${
+				`SELECT * FROM KLIENCI WHERE KLIENCI.KL_IMIE LIKE '%${
 					data.imie
-				}%' AND KLIENCI.KL_NAZWISKO LIKE '${data.nazwisko}%'`,
+				}%' AND KLIENCI.KL_NAZWISKO LIKE '%${data.nazwisko}%'`,
 				function(err, result) {
 					console.log(result);
 					event.sender.send("wyszukaj_klient", result);
@@ -235,6 +235,21 @@ try {
 					data.miejscowosc
 				}')`,
 				function(err, result) {
+					db.detach();
+				}
+			);
+		});
+	});
+
+	ipcMain.on("wypozyczenia", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.query(
+				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID`,
+				function(err, result) {
+					console.log(result);
+					event.sender.send("wypozyczenia", result);
+
 					db.detach();
 				}
 			);
