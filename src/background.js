@@ -247,8 +247,11 @@ try {
 	ipcMain.on("wypozyczenia", (event, data) => {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
+
+			const nazwisko = data.nazwisko ? data.nazwisko : "";
+
 			db.query(
-				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID`,
+				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID WHERE k.KL_NAZWISKO LIKE '%${nazwisko}%'`,
 				function(err, result) {
 					event.sender.send("wypozyczenia", result);
 

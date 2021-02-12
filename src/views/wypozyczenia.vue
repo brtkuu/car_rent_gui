@@ -1,9 +1,16 @@
 <template>
     <div>
         <div v-if="wypozyczenia.length">
-        Miejsce oddania: <select name="placowka" id="placowka">
+        <div>
+            <label for="wyszukaj_wyp_nazwisko">Nazwisko: </label>
+            <input type="text" name="wyszukaj_wyp_nazwisko" id="wyszukaj_wyp_nazwisko">
+            <button @click="wyszukaj()">Wyszukaj</button>
+        </div>
+        <div>
+            Miejsce oddania: <select name="placowka" id="placowka">
             <option v-for="item in placowki" v-bind:key="item.PL_NAZWA">{{item.PL_NAZWA}}</option>
-        </select>
+            </select>
+        </div>
         </div>
         <ul>
             <li v-for="item in wypozyczenia" v-bind:key="item.WY_ID">   
@@ -29,6 +36,12 @@ export default {
                 pl_nazwa: document.getElementById("placowka").value
             }
             ipcRenderer.send("zwrot", params);
+        },
+        wyszukaj() {
+            const params = {
+                nazwisko: document.getElementById("wyszukaj_wyp_nazwisko").value,
+            }
+            ipcRenderer.send("wypozyczenia", params);
         }
     },
     mounted() {
@@ -41,9 +54,9 @@ export default {
             this.$forceUpdate();
         });
         ipcRenderer.on("zwrot", event =>{
-            ipcRenderer.send("wypozyczenia");
+            ipcRenderer.send("wypozyczenia", {nazwisko: ""});
         })
-        ipcRenderer.send("wypozyczenia");
+        ipcRenderer.send("wypozyczenia", {nazwisko: ""});
         ipcRenderer.send("placowki");
     }
 }
