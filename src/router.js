@@ -4,6 +4,7 @@ import klienci from "./views/klienci";
 import auta from "./views/auta";
 import dodajKlienta from "./views/dodajKlienta";
 import wypozyczenia from "./views/wypozyczenia";
+import wypozycz from "./views/wypozycz";
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
 			path: "/wypozyczenia",
 			name: "wypozyczenia",
 			component: wypozyczenia,
+		},
+		{
+			path: "/wypozycz",
+			name: "wypozycz",
+			component: wypozycz,
 		},
 	],
 });

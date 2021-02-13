@@ -8,7 +8,7 @@
         </form>
         <button @click="wyszukaj()">Wyszukaj</button>
         <ul>
-        <li v-for="(item) in this.wypozyczenia" v-bind:key="item.AU_ID" @click="autoClick(item)">
+        <li v-for="(item) in this.$store.state.auta" v-bind:key="item.AU_ID" @click="autoClick(item)">
             {{item.AU_MARKA}} {{item.AU_MODEL}} | Dostepnosc: {{item.AU_DOSTEPNOSC}} | {{item.PL_NAZWA}}
         </li>
     </ul>
@@ -26,8 +26,6 @@ export default {
     },
     data() {
         return {
-            wypozyczenia: [],
-            wybrane_auto: {},
             show_component_auto: false,
         }
     },
@@ -46,12 +44,6 @@ export default {
         }
     },
     mounted() {
-        ipcRenderer.on("auta", (_event, data)=>{
-            this.wypozyczenia = data;
-        });
-        ipcRenderer.on("wyszukaj_auta", (_event, data)=>{
-            this.wypozyczenia = data;
-        });
         ipcRenderer.send("auta");
     }
 }

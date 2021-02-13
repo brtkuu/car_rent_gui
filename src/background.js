@@ -251,7 +251,7 @@ try {
 			const nazwisko = data.nazwisko ? data.nazwisko : "";
 
 			db.query(
-				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID WHERE k.KL_NAZWISKO LIKE '%${nazwisko}%'`,
+				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID WHERE k.KL_NAZWISKO LIKE '%${nazwisko}%' AND w.WY_DATA_ZW is NULL`,
 				function(err, result) {
 					event.sender.send("wypozyczenia", result);
 
@@ -275,11 +275,28 @@ try {
 		});
 	});
 
+	ipcMain.on("wypozycz", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.execute(
+				`EXECUTE PROCEDURE WYPOZYCZ(${data.klient_id}, '${
+					data.auto_id
+				}', '${data.data_wyp}')`,
+				function(err, result) {
+					event.sender.send("zwrot");
+					db.detach();
+				}
+			);
+		});
+	});
+
 	ipcMain.on("zwrot", (event, data) => {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.execute(
-				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, '${data.pl_nazwa}')`,
+				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, '${
+					data.pl_nazwa
+				}', '${data.data_zwrotu}')`,
 				function(err, result) {
 					event.sender.send("zwrot");
 					db.detach();

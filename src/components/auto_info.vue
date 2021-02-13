@@ -1,5 +1,6 @@
 <template>
     <div class="klient_info">
+        <p>Identyfikator auta: {{item.AU_ID}}</p>
         <p>Marka: {{item.AU_MODEL}}</p>
         <p>Model: {{item.AU_MARKA}}</p>
         <p>Klasa: {{item.AU_KLASA}}</p>
@@ -9,6 +10,7 @@
         <p>Skrzynia biegów: {{item.AU_SKRZYNIA}}</p>
         <p>Nadwozie: {{item.AU_NADWOZIE}}</p>
         <p>Koszt (dzień): {{item.AU_KOSZT_DZIEN}}</p>
+        
     </div>
 </template>
 <script>

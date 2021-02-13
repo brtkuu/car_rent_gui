@@ -7,7 +7,12 @@ import { ipcRenderer } from "electron";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-	state: {},
+	state: {
+		placowki: [],
+		klienci: [],
+		wypozyczenia: [],
+		auta: [],
+	},
 	mutations: {},
 	actions: {},
 	getters: {},

@@ -8,7 +8,7 @@
     </form>
     <button @click="wyszukaj()">Wyszukaj</button>
     <ul>
-        <li v-for="(item) in klienci" v-bind:key="item.KL_ID" @click="klientclick(item)">
+        <li v-for="(item) in this.$store.state.klienci" v-bind:key="item.KL_ID" @click="klientclick(item)">
             {{item.KL_IMIE}} {{item.KL_NAZWISKO}}
         </li>
     </ul>
@@ -25,8 +25,6 @@ export default {
     },
     data() {
         return {
-            klienci : [],
-            wybrany_klient: {},
             show_modal_klient: false,
         }
     },
@@ -45,13 +43,7 @@ export default {
         }
     },
     mounted() {
-		ipcRenderer.on("klienci", (_event, data)=>{
-			this.klienci = data;
-            this.$forceUpdate();
-		});
-        ipcRenderer.on("wyszukaj_klient", (_event, data)=>{
-            this.klienci = data;
-        });
+		
         ipcRenderer.send("klienci");
 	}
 }
