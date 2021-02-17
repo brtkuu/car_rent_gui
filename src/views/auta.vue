@@ -32,12 +32,14 @@ export default {
     methods: {
         autoClick(item) {
             this.wybrane_auto = item;
+            this.show_component_auto = false;
             this.show_component_auto = true;
         },
         wyszukaj() {
             const params = {
                 marka: document.getElementById('marka').value,
                 model: document.getElementById('model').value,
+                dostepnosc: "T",
             }
             ipcRenderer.send("wyszukaj_auta", params);
             

@@ -31,6 +31,7 @@ export default {
     methods: {
         klientclick(item) {
             this.wybrany_klient = item;
+            this.show_modal_klient = false;
             this.show_modal_klient = true;
         },
         wyszukaj() {
@@ -42,8 +43,7 @@ export default {
             
         }
     },
-    mounted() {
-		
+    mounted() {	
         ipcRenderer.send("klienci");
 	}
 }

@@ -177,13 +177,13 @@ try {
 			);
 		});
 	});
-	ipcMain.on("auta", (event) => {
+	ipcMain.on("auta", (event, data) => {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 
 			// db = DATABASE
 			db.query(
-				"SELECT * FROM AUTA a INNER JOIN ROZMIESZCZENIE r ON a.AU_ID = r.AU_ID",
+				`SELECT * FROM AUTA a INNER JOIN ROZMIESZCZENIE r ON a.AU_ID = r.AU_ID`,
 				function(err, result) {
 					event.sender.send("auta", result);
 					db.detach();
@@ -193,12 +193,17 @@ try {
 	});
 
 	ipcMain.on("wyszukaj_auta", async (event, data) => {
+		console.log(data.dostepnosc);
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.query(
 				`SELECT * FROM AUTA INNER JOIN ROZMIESZCZENIE r ON AUTA.AU_ID = r.AU_ID WHERE AUTA.AU_MARKA LIKE '${
 					data.marka
-				}%' AND AUTA.AU_MODEL LIKE '%${data.model}%'`,
+				}%' AND AUTA.AU_MODEL LIKE '%${data.model}%'${
+					data.dostepnosc
+						? `AND AUTA.AU_DOSTEPNOSC = '${data.dostepnosc}'`
+						: ""
+				}`,
 				function(err, result) {
 					console.log(result);
 					event.sender.send("wyszukaj_auta", result);
@@ -279,8 +284,8 @@ try {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.execute(
-				`EXECUTE PROCEDURE WYPOZYCZ(${data.klient_id}, '${
-					data.auto_id
+				`EXECUTE PROCEDURE WYPOZYCZ(${data.auto_id}, '${
+					data.klient_id
 				}', '${data.data_wyp}')`,
 				function(err, result) {
 					event.sender.send("zwrot");

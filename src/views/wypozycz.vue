@@ -30,21 +30,25 @@
             </div>
         </div>
     </div>
+    <button @click="wypozycz()">Wypozycz</button>
 </div>
 </template>
 <script>
 import { ipcRenderer } from 'electron'
 export default {
     name: "Wypozycz",
-    data() {
-        return {
-            do_wypozyczenia: [],
-        }
-    },
     methods: {
         wypozycz() { 
-           console.log(document.querySelector('input[name="klient"]:checked').value);
-            // ipcRenderer.send("wypozycz", params);
+            const data = new Date();
+
+            const params = {
+                klient_id: document.querySelector('input[name="klient"]:checked').value, 
+                auto_id: document.querySelector('input[name="auto"]:checked').value,
+                data_wyp: `${data.getFullYear()}-${data.getMonth()+1}-${data.getDate()}`,
+            }
+
+            ipcRenderer.send("wypozycz", params);
+            location.reload();
         },
         wyszukaj_klient() {
             const params = {
@@ -58,13 +62,19 @@ export default {
             const params = {
                 marka: document.getElementById('marka').value,
                 model: document.getElementById('model').value,
+                dostepnosc: "T",
             }
             ipcRenderer.send("wyszukaj_auta", params);
-            
         }
     },
     mounted() {
-        ipcRenderer.send("do_wyp");
+        const params = {
+                marka: "",
+                model: "",
+                dostepnosc: "T",
+            }
+        ipcRenderer.send("wyszukaj_auta", params);
+        ipcRenderer.send("klienci");
     }
 }
 </script>
