@@ -48,6 +48,7 @@ try {
 		height: 700,
 		minWidth: 800,
 		minHeight: 600,
+		title: "Wypozyczalnia aut",
 	};
 
 	function createMainWindow() {
@@ -193,7 +194,6 @@ try {
 	});
 
 	ipcMain.on("wyszukaj_auta", async (event, data) => {
-		console.log(data.dostepnosc);
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.query(
@@ -205,7 +205,6 @@ try {
 						: ""
 				}`,
 				function(err, result) {
-					console.log(result);
 					event.sender.send("wyszukaj_auta", result);
 
 					db.detach();
@@ -222,7 +221,6 @@ try {
 					data.imie
 				}%' AND KLIENCI.KL_NAZWISKO LIKE '%${data.nazwisko}%'`,
 				function(err, result) {
-					console.log(result);
 					event.sender.send("wyszukaj_klient", result);
 
 					db.detach();
@@ -288,7 +286,7 @@ try {
 					data.klient_id
 				}', '${data.data_wyp}')`,
 				function(err, result) {
-					event.sender.send("zwrot");
+					event.sender.send("wypozyczone");
 					db.detach();
 				}
 			);

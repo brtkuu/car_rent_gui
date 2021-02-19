@@ -48,7 +48,8 @@ export default {
             }
 
             ipcRenderer.send("wypozycz", params);
-            location.reload();
+            ipcRenderer.send("wyszukaj_auta", {marka:"", model:"", dostepnosc: "T"});
+            this.$forceUpdate();
         },
         wyszukaj_klient() {
             const params = {
@@ -65,6 +66,7 @@ export default {
                 dostepnosc: "T",
             }
             ipcRenderer.send("wyszukaj_auta", params);
+
         }
     },
     mounted() {
@@ -75,6 +77,9 @@ export default {
             }
         ipcRenderer.send("wyszukaj_auta", params);
         ipcRenderer.send("klienci");
+        ipcRenderer.on("wypozyczone", ()=>{
+           ipcRenderer.send("wyszukaj_auta", params);
+        })
     }
 }
 </script>

@@ -36,6 +36,9 @@ export default {
                 data_zwrotu: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
             }
             ipcRenderer.send("zwrot", params);
+            
+
+            this.$forceUpdate();
         },
         wyszukaj() {
             const params = {
@@ -46,6 +49,9 @@ export default {
     },
     mounted() {
         ipcRenderer.send("wypozyczenia", {nazwisko: ""});
+        ipcRenderer.on("zwrot", ()=> {
+            ipcRenderer.send("wypozyczenia", {nazwisko: ""});
+        })
     }
 }
 </script>
