@@ -297,14 +297,28 @@ try {
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.execute(
-				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, '${
+				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, ${data.wy_id}, '${
 					data.pl_nazwa
 				}', '${data.data_zwrotu}')`,
 				function(err, result) {
+					console.log(data);
 					event.sender.send("zwrot");
 					db.detach();
 				}
 			);
+		});
+	});
+
+	ipcMain.on("delete", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+			db.execute(`EXECUTE PROCEDURE USUN_KLIENT(${data.kl_id})`, function(
+				err,
+				result
+			) {
+				event.sender.send("deleted");
+				db.detach();
+			});
 		});
 	});
 } catch (err) {

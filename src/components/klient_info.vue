@@ -11,6 +11,7 @@
     </div>
 </template>
 <script>
+import { ipcRenderer } from 'electron'
 export default {
     name: "Klient_info",
     props: ["item"],
@@ -19,6 +20,9 @@ export default {
             dostepne_auta: [],
         }
     },
+    methods: {
+
+    }
 }
 </script>
 <style scoped>
