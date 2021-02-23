@@ -14,7 +14,7 @@
         <p><label for="ulica">Ulica: </label>
         <input type="text" id="ulica" required></p>
         <p><label for="nr_domu">Nr domu: </label>
-        <input type="number" id="nr_domu" required></p>
+        <input type="text" id="nr_domu" required></p>
         <p><label for="kod_pocztowy">Kod pocztowy: </label>
         <input type="text" id="kod_pocztowy" required></p>
         <p><label for="miejscowosc">Miejscowosc: </label>

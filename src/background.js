@@ -321,6 +321,23 @@ try {
 			});
 		});
 	});
+
+	ipcMain.on("historia", (event, data) => {
+		Firebird.attach(options, function(err, db) {
+			if (err) throw err;
+
+			const nazwisko = data.nazwisko ? data.nazwisko : "";
+
+			db.query(
+				`SELECT * FROM WYPOZYCZENIA w INNER JOIN KLIENCI k ON k.KL_ID = w.KL_ID INNER JOIN AUTA a ON a.AU_ID = w.AU_ID WHERE k.KL_NAZWISKO LIKE '%${nazwisko}%' AND w.WY_DATA_ZW IS NOT NULL ORDER BY w.WY_DATA_OD DESC`,
+				function(err, result) {
+					event.sender.send("historia", result);
+
+					db.detach();
+				}
+			);
+		});
+	});
 } catch (err) {
 	console.log(err);
 }

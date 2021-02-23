@@ -12,6 +12,7 @@ export default new Vuex.Store({
 		klienci: [],
 		wypozyczenia: [],
 		auta: [],
+		historia: [],
 	},
 	mutations: {},
 	actions: {},
