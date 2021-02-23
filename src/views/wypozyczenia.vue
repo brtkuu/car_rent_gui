@@ -14,7 +14,7 @@
         </div>
         <ul>
             <li v-for="item in this.$store.state.wypozyczenia" v-bind:key="item.WY_ID">   
-                {{item.KL_IMIE}} {{item.KL_NAZWISKO}} - {{item.AU_MARKA}} {{item.AU_MODEL}} <button @click="zwrot(item.WY_ID, item.AU_ID)">🔙</button>
+                {{item.KL_IMIE}} {{item.KL_NAZWISKO}} - {{item.AU_MARKA}} {{item.AU_MODEL}} <button @click="zwrot(item.WY_ID, item.AU_ID, item.WY_DATA_OD, item.AU_KOSZT_DZIEN)">🔙</button>
             </li>
         </ul>
     </div>
@@ -29,12 +29,14 @@ export default {
         }
     },
     methods: {
-        zwrot(wy_id, auto_id){
+        zwrot(wy_id, auto_id, start_wyp, dzien_cena){
             const params = {
                 auto_id,
                 wy_id,
+                start_wyp: new Date(start_wyp).getTime(),
                 pl_nazwa: document.getElementById("placowka").value,
-                data_zwrotu: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
+                dzien_cena,
+                data_zwrotu: `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`,
             }
             ipcRenderer.send("zwrot", params);
             this.$forceUpdate();

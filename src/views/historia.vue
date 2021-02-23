@@ -9,7 +9,7 @@
         </div>
         <ul>
             <li v-for="item in this.$store.state.historia" v-bind:key="item.WY_ID">   
-                {{item.KL_IMIE}} {{item.KL_NAZWISKO}} - {{item.AU_MARKA}} {{item.AU_MODEL}} | {{new Date(item.WY_DATA_OD).toLocaleString('pl-PL', {year: 'numeric', month: 'long', day: 'numeric' })}} - {{new Date(item.WY_DATA_ZW).toLocaleString('pl-PL', {year: 'numeric', month: 'long', day: 'numeric' })}}
+                {{item.KL_IMIE}} {{item.KL_NAZWISKO}} - {{item.AU_MARKA}} {{item.AU_MODEL}} | {{new Date(item.WY_DATA_OD).toLocaleString('pl-PL', {year: 'numeric', month: 'long', day: 'numeric' })}} - {{new Date(item.WY_DATA_ZW).toLocaleString('pl-PL', {year: 'numeric', month: 'long', day: 'numeric' })}} | {{item.WY_KOSZT}} zł
             </li>
         </ul>
     </div>

@@ -294,12 +294,18 @@ try {
 	});
 
 	ipcMain.on("zwrot", (event, data) => {
+		const czas_wyp = Math.floor(
+			(new Date(data.data_zwrotu).getTime() - data.start_wyp) / 86400000 +
+				1
+		);
+		const koszt = czas_wyp * data.dzien_cena;
+
 		Firebird.attach(options, function(err, db) {
 			if (err) throw err;
 			db.execute(
 				`EXECUTE PROCEDURE ZWROT(${data.auto_id}, ${data.wy_id}, '${
 					data.pl_nazwa
-				}', '${data.data_zwrotu}')`,
+				}', '${data.data_zwrotu}', ${koszt})`,
 				function(err, result) {
 					console.log(data);
 					event.sender.send("zwrot");

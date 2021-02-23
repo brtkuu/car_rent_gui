@@ -3,7 +3,7 @@
     <form>
         <label for="imie">Imie:</label>
         <input type="text" id="imie">
-        <label for="nazwisko">Naziwsko:</label>
+        <label for="nazwisko">Nazwisko:</label>
         <input type="text" id="nazwisko">
     </form>
     <button @click="wyszukaj()">Wyszukaj</button>
